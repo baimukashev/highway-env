@@ -234,10 +234,12 @@ class DiscreteMetaAction(ActionType):
 
     @property
     def vehicle_class(self) -> Callable:
-        return functools.partial(MDPVehicle, target_speeds=self.target_speeds)
+        #return functools.partial(MDPVehicle, target_speeds=self.target_speeds)
+        return functools.partial(IDMVehicle)
 
     def act(self, action: Union[int, np.ndarray]) -> None:
-        self.controlled_vehicle.act(self.actions[int(action)])
+        # self.controlled_vehicle.act(self.actions[int(action)])
+        pass
 
     def get_available_actions(self) -> List[int]:
         """

@@ -18,13 +18,13 @@ class IDMVehicle(ControlledVehicle):
     """
 
     # Longitudinal policy parameters
-    ACC_MAX = 6.0  # [m/s2]
+    ACC_MAX = 6.0 # [m/s2]\
     """Maximum acceleration."""
 
-    COMFORT_ACC_MAX = 3.0  # [m/s2]
+    COMFORT_ACC_MAX = 3.0 # [m/s2]
     """Desired maximum acceleration."""
 
-    COMFORT_ACC_MIN = -5.0  # [m/s2]
+    COMFORT_ACC_MIN = -5.0 # [m/s2]
     """Desired maximum deceleration."""
 
     DISTANCE_WANTED = 5.0 + ControlledVehicle.LENGTH  # [m]
@@ -58,6 +58,13 @@ class IDMVehicle(ControlledVehicle):
         super().__init__(road, position, heading, speed, target_lane_index, target_speed, route)
         self.enable_lane_change = enable_lane_change
         self.timer = timer or (np.sum(self.position)*np.pi) % self.LANE_CHANGE_DELAY
+        
+        # Change IDM parameters
+        self.ACC_MAX = 6 + np.random.normal(0, 0.5)
+        self.COMFORT_ACC_MAX = 3 + np.random.normal(0, 0.5)
+        self.COMFORT_ACC_MIN = -5 + np.random.normal(0, 0.5)
+
+        self.target_speed = 20 + np.random.normal(0, 2)
 
     def randomize_behavior(self):
         self.DELTA = self.road.np_random.uniform(low=self.DELTA_RANGE[0], high=self.DELTA_RANGE[1])
