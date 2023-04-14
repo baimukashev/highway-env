@@ -16,12 +16,12 @@ warnings.filterwarnings("ignore")
 # Defining main function
 def main():
       
-    # Create agent as IDM Vehicle
+    # Create RL agent as an IDM Vehicle
     # https://github.com/Farama-Foundation/HighwayEnv/issues/295 
-    # Action type
+    # Change Action type
     # 1. Vehicle class -> IDM
     # 2. Act() -> none
-    # Randomize the IDM params (target_speed) vehicle.behavior.IDM
+    # Randomize IDM params vehicle.behavior.IDM
     # 1. ACC_MAX
     # 2. COMFORT_ACC_MAX
     # 3. COMFORT_ACC_MIN
@@ -75,7 +75,7 @@ def main():
 
     for ind in range(num_trajs):
         
-        print('Iteration: ', ind)
+        # print('Iteration: ', ind)
         
         # update default configs
         env.configure(env_config["config"])
@@ -100,12 +100,13 @@ def main():
     save_name = 'sample_acc_n50'
     np.save(save_name, data)
 
-    print(data.shape)
+    # print(data.shape)
     env.close()
     
     # load 
     # data = np.load(save_name + '.npy')
     
+    print('Data generation finished..')
   
 # Using the special variable 
 # __name__
