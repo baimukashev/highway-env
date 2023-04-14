@@ -6,6 +6,6 @@ To generate dataset:
 
 3. Switch to branch **data_collection**
 
-4. Run ```python tutorial.py``` from *highway_env/data_collection/*
+4. Run ```python tutorial.py``` from **highway_env/data_collection/**
 
 5. Data is stored in **temp/** folder
