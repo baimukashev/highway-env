@@ -65,7 +65,7 @@ def main():
 
     # Collect data
     save_video = False
-    num_trajs = 5
+    num_trajs = 50
     states = []
     
     # save recording
