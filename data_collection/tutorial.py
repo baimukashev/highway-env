@@ -32,7 +32,7 @@ def main():
         'id': 'highway-v0',
         'config': {
             'action': {'type': 'DiscreteMetaAction'},
-            "lanes_count": 2,
+            "lanes_count": 1,
             "vehicles_count": 10,
             "observation": {
                 "type": "Kinematics",
@@ -65,7 +65,7 @@ def main():
 
     # Collect data
     save_video = False
-    num_trajs = 50
+    num_trajs = 5
     states = []
     
     # save recording
@@ -91,13 +91,15 @@ def main():
             action = env.action_space.sample()
             obs, reward, done, _ , info = env.step(action)
             
-            states.append(obs)
+            # add traj index as first element of the feature array
+            features = np.insert(obs, 0, ind)
+            states.append(features)
             iter += 1
 
-    data = np.vstack(states).swapaxes(0,1)   # num_states, num_features
+    data = np.vstack(states).swapaxes(0,1)   # [num_states, num_features]
 
     # save
-    save_name = 'sample_acc_n50'
+    save_name = 'sample_acc_n5'
     np.save(save_name, data)
 
     # print(data.shape)
@@ -108,8 +110,8 @@ def main():
     
     print('Data generation finished..')
   
-# Using the special variable 
-# __name__
+
+
 if __name__=="__main__":
     main()
     
