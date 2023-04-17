@@ -65,6 +65,8 @@ class IDMVehicle(ControlledVehicle):
         self.COMFORT_ACC_MIN = -5 + np.random.normal(0, 0.5)
 
         self.target_speed = 20 + np.random.normal(0, 2)
+        self.demo_action = 0
+        
 
     def randomize_behavior(self):
         self.DELTA = self.road.np_random.uniform(low=self.DELTA_RANGE[0], high=self.DELTA_RANGE[1])
@@ -117,7 +119,9 @@ class IDMVehicle(ControlledVehicle):
             action['acceleration'] = min(action['acceleration'], target_idm_acceleration)
         # action['acceleration'] = self.recover_from_stop(action['acceleration'])
         action['acceleration'] = np.clip(action['acceleration'], -self.ACC_MAX, self.ACC_MAX)
+        self.demo_action = action
         Vehicle.act(self, action)  # Skip ControlledVehicle.act(), or the command will be overriden.
+        
 
     def step(self, dt: float):
         """

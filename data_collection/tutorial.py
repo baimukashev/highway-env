@@ -4,6 +4,7 @@
 import os
 import sys
 import numpy as np
+import pickle
 
 import gymnasium as gym
 from gymnasium.wrappers.flatten_observation import FlattenObservation
@@ -32,7 +33,7 @@ def main():
         'id': 'highway-v0',
         'config': {
             'action': {'type': 'DiscreteMetaAction'},
-            "lanes_count": 1,
+            "lanes_count": 3,
             "vehicles_count": 10,
             "observation": {
                 "type": "Kinematics",
@@ -57,6 +58,7 @@ def main():
             "policy_frequency": 1,
             "duration": 10,
             "controlled_vehicles": 1,
+            "simulation_frequency": 5,
         }
     }
 
@@ -65,8 +67,8 @@ def main():
 
     # Collect data
     save_video = False
-    num_trajs = 5
-    states = []
+    num_trajs = 200
+    trajs = []
     
     # save recording
     model_path = f"temp/"
@@ -75,32 +77,51 @@ def main():
 
     for ind in range(num_trajs):
         
-        # print('Iteration: ', ind)
+        traj = []
+        
+        print('Iteration: ', ind)
         
         # update default configs
+        
         env.configure(env_config["config"])
+        env.reset()
         env = FlattenObservation(env)
 
         obs, _ = env.reset(seed=ind)
         done = False
         iter = 0
         
-        while not done and iter < 500:
+        while not done and iter < 300:
             
             # For data collection with IDM, action is ignored
             action = env.action_space.sample()
+            
             obs, reward, done, _ , info = env.step(action)
             
+            steering = info["demo_action"]["steering"]
+            acc = info["demo_action"]["acceleration"]
+                        
             # add traj index as first element of the feature array
-            features = np.insert(obs, 0, ind)
-            states.append(features)
+            # features = np.insert(obs, 0, ind)
+            
+            actions = np.array((acc, steering))
+            
+            state_action = np.concatenate((obs, actions))
+            
+            traj.append(state_action)
             iter += 1
+            
+        trajs.append(np.array(traj))
 
-    data = np.vstack(states).swapaxes(0,1)   # [num_states, num_features]
+    # data = np.vstack(trajs)   # [num_states, num_features + actions]
+    
 
     # save
-    save_name = 'sample_acc_n5'
-    np.save(save_name, data)
+    # save_name = 'sample_acc_n5'
+    # np.save(save_name, data)
+    
+    with open("sample200.pkl", 'wb') as f:
+        pickle.dump(trajs, f)
 
     # print(data.shape)
     env.close()
@@ -109,6 +130,8 @@ def main():
     # data = np.load(save_name + '.npy')
     
     print('Data generation finished..')
+    
+
   
 
 
