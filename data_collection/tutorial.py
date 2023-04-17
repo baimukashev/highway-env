@@ -67,7 +67,7 @@ def main():
 
     # Collect data
     save_video = False
-    num_trajs = 200
+    num_trajs = 2
     trajs = []
     
     # save recording
@@ -120,7 +120,7 @@ def main():
     # save_name = 'sample_acc_n5'
     # np.save(save_name, data)
     
-    with open("sample200.pkl", 'wb') as f:
+    with open("sample2.pkl", 'wb') as f:
         pickle.dump(trajs, f)
 
     # print(data.shape)
