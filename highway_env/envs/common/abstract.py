@@ -175,7 +175,7 @@ class AbstractEnv(gym.Env):
             "speed": self.vehicle.speed,
             "crashed": self.vehicle.crashed,
             "action": action,
-            "demo_action": self.vehicle.demo_action,
+            "cont_action": self.vehicle.action,
             
         }
         try:

@@ -34,7 +34,7 @@ def main():
         'config': {
             'action': {'type': 'DiscreteMetaAction'},
             "lanes_count": 3,
-            "vehicles_count": 10,
+            "vehicles_count": 20,
             "observation": {
                 "type": "Kinematics",
                 "vehicles_count": 5,
@@ -67,7 +67,7 @@ def main():
 
     # Collect data
     save_video = False
-    num_trajs = 2
+    num_trajs = 100
     trajs = []
     
     # save recording
@@ -82,7 +82,6 @@ def main():
         print('Iteration: ', ind)
         
         # update default configs
-        
         env.configure(env_config["config"])
         env.reset()
         env = FlattenObservation(env)
@@ -91,15 +90,15 @@ def main():
         done = False
         iter = 0
         
-        while not done and iter < 300:
+        while not done and iter < 1000:
             
             # For data collection with IDM, action is ignored
             action = env.action_space.sample()
             
             obs, reward, done, _ , info = env.step(action)
             
-            steering = info["demo_action"]["steering"]
-            acc = info["demo_action"]["acceleration"]
+            steering = info["cont_action"]["steering"]
+            acc = info["cont_action"]["acceleration"]
                         
             # add traj index as first element of the feature array
             # features = np.insert(obs, 0, ind)
@@ -113,26 +112,15 @@ def main():
             
         trajs.append(np.array(traj))
 
-    # data = np.vstack(trajs)   # [num_states, num_features + actions]
-    
 
-    # save
-    # save_name = 'sample_acc_n5'
-    # np.save(save_name, data)
-    
-    with open("sample2.pkl", 'wb') as f:
+    # save to file
+    with open("sample100.pkl", 'wb') as f:
         pickle.dump(trajs, f)
 
-    # print(data.shape)
     env.close()
-    
-    # load 
-    # data = np.load(save_name + '.npy')
-    
+        
     print('Data generation finished..')
     
-
-  
 
 
 if __name__=="__main__":
